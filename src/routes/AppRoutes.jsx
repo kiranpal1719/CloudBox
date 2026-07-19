@@ -8,7 +8,6 @@ import Dashboard from "../pages/Dashboard";
 import Upload from "../pages/Upload";
 import Files from "../pages/Files";
 import Profile from "../pages/Profile";
-import NotFound from "../pages/NotFound";
 
 function AppRoutes() {
   return (
@@ -21,7 +20,7 @@ function AppRoutes() {
       <Route path="/upload" element={<Upload />} />
       <Route path="/files" element={<Files />} />
       <Route path="/profile" element={<Profile />} />
-      <Route path="*" element={<NotFound />} />
+     
     </Routes>
   );
 }
