@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import heroImage from "../assets/images/Cloud Storage Photo.jpg";
+import heroImage from "../assets/images/Cloud storage photo.jpg";
 
 
 function Hero() {
