@@ -4,13 +4,11 @@ import Sidebar from "../components/Sidebar";
 
 function Dashboard() {
   const navigate = useNavigate();
-
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
     const storedFiles =
       JSON.parse(localStorage.getItem("myFiles")) || [];
-
     setFiles(storedFiles);
   }, []);
 
@@ -23,29 +21,31 @@ function Dashboard() {
   const freeStorage = totalStorage - usedStorage;
 
   return (
-    <div className="flex bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100">
 
       <Sidebar />
 
-      <main className="flex-1 min-h-screen p-4 sm:p-6 lg:p-8">
+      <main className="flex-1 p-5 sm:p-6 lg:p-8 mt-16 lg:mt-0 overflow-x-hidden">
 
         {/* Header */}
 
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <div className="flex flex-col md:flex-row justify-between md:items-center gap-5 mb-8">
 
           <div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-blue-600">
+
+            <h1 className="text-3xl md:text-4xl font-bold text-blue-600">
               Dashboard
             </h1>
 
             <p className="text-gray-500 mt-2">
               Welcome to your personal cloud storage.
             </p>
+
           </div>
 
           <button
             onClick={() => navigate("/upload")}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-md transition"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-md"
           >
             Upload New File
           </button>
@@ -56,7 +56,7 @@ function Dashboard() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
 
-          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6">
+          <div className="bg-white rounded-2xl shadow p-6">
 
             <p className="text-gray-500">
               Total Storage
@@ -68,7 +68,7 @@ function Dashboard() {
 
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6">
+          <div className="bg-white rounded-2xl shadow p-6">
 
             <p className="text-gray-500">
               Used Storage
@@ -80,7 +80,7 @@ function Dashboard() {
 
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6">
+          <div className="bg-white rounded-2xl shadow p-6">
 
             <p className="text-gray-500">
               Free Storage
@@ -92,7 +92,7 @@ function Dashboard() {
 
           </div>
 
-          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6">
+          <div className="bg-white rounded-2xl shadow p-6">
 
             <p className="text-gray-500">
               Total Files
@@ -106,13 +106,13 @@ function Dashboard() {
 
         </div>
 
-        {/* Storage Usage */}
+        {/* Storage */}
 
-        <div className="bg-white rounded-2xl shadow-md mt-8 p-6">
+        <div className="bg-white rounded-2xl shadow p-6 mt-8">
 
           <div className="flex justify-between items-center mb-4">
 
-            <h2 className="text-xl sm:text-2xl font-bold">
+            <h2 className="text-2xl font-bold">
               Storage Usage
             </h2>
 
@@ -125,7 +125,7 @@ function Dashboard() {
           <div className="w-full bg-gray-300 rounded-full h-4">
 
             <div
-              className="bg-blue-600 h-4 rounded-full transition-all duration-500"
+              className="bg-blue-600 h-4 rounded-full"
               style={{
                 width: `${Math.min(
                   (usedStorage / totalStorage) * 100,
@@ -140,11 +140,11 @@ function Dashboard() {
 
         {/* Recent Files */}
 
-        <div className="bg-white rounded-2xl shadow-md mt-8 p-6">
+        <div className="bg-white rounded-2xl shadow p-6 mt-8">
 
-          <div className="flex justify-between items-center mb-5">
+          <div className="flex justify-between items-center mb-6">
 
-            <h2 className="text-xl sm:text-2xl font-bold">
+            <h2 className="text-2xl font-bold">
               Recent Files
             </h2>
 
@@ -159,13 +159,13 @@ function Dashboard() {
 
           {files.length === 0 ? (
 
-            <div className="text-center py-12">
+            <div className="text-center py-10">
 
-              <h3 className="text-xl font-semibold text-gray-600">
+              <h3 className="text-2xl font-semibold text-gray-500">
                 No Files Uploaded
               </h3>
 
-              <p className="text-gray-500 mt-2">
+              <p className="text-gray-400 mt-2">
                 Upload your first file to see it here.
               </p>
 
@@ -173,7 +173,7 @@ function Dashboard() {
 
           ) : (
 
-            <div className="space-y-3">
+            <div className="space-y-4">
 
               {files
                 .slice(-5)
@@ -182,22 +182,22 @@ function Dashboard() {
 
                   <div
                     key={file.id}
-                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-50 rounded-xl p-4 hover:bg-gray-100 transition"
+                    className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border rounded-xl p-4 hover:bg-gray-50"
                   >
 
                     <div>
 
-                      <h3 className="font-semibold">
+                      <h3 className="font-semibold text-lg">
                         {file.name}
                       </h3>
 
                       <p className="text-gray-500 text-sm">
-                        Uploaded File
+                        {file.uploadedAt}
                       </p>
 
                     </div>
 
-                    <span className="font-semibold text-blue-600 mt-2 sm:mt-0">
+                    <span className="font-semibold text-blue-600">
                       {file.size}
                     </span>
 
