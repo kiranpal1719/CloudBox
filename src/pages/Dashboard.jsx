@@ -14,7 +14,7 @@ function Dashboard() {
     setFiles(storedFiles);
   }, []);
 
-  const totalStorage = 100; // 100 MB Demo
+  const totalStorage = 100;
 
   const usedStorage = files.reduce((total, file) => {
     return total + parseFloat(file.size);
@@ -23,120 +23,196 @@ function Dashboard() {
   const freeStorage = totalStorage - usedStorage;
 
   return (
-    <div className="flex">
+    <div className="flex bg-gray-100">
+
       <Sidebar />
 
-      <main className="flex-1 bg-gray-100 min-h-screen p-8">
+      <main className="flex-1 min-h-screen p-4 sm:p-6 lg:p-8">
 
-        <div className="flex justify-between items-center mb-8">
+        {/* Header */}
 
-          <h1 className="text-4xl font-bold text-blue-600">
-            Dashboard
-          </h1>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-bold text-blue-600">
+              Dashboard
+            </h1>
+
+            <p className="text-gray-500 mt-2">
+              Welcome to your personal cloud storage.
+            </p>
+          </div>
 
           <button
             onClick={() => navigate("/upload")}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-md transition"
           >
             Upload New File
           </button>
 
         </div>
 
-        {/* Storage Cards */}
+        {/* Cards */}
 
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
 
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-gray-500">Total Storage</h3>
+          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6">
 
-            <p className="text-3xl font-bold text-blue-600 mt-3">
+            <p className="text-gray-500">
+              Total Storage
+            </p>
+
+            <h2 className="text-3xl font-bold text-blue-600 mt-3">
               {totalStorage} MB
-            </p>
+            </h2>
+
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-gray-500">Used Storage</h3>
+          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6">
 
-            <p className="text-3xl font-bold text-green-600 mt-3">
+            <p className="text-gray-500">
+              Used Storage
+            </p>
+
+            <h2 className="text-3xl font-bold text-green-600 mt-3">
               {usedStorage.toFixed(2)} MB
-            </p>
+            </h2>
+
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-gray-500">Free Storage</h3>
+          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6">
 
-            <p className="text-3xl font-bold text-purple-600 mt-3">
+            <p className="text-gray-500">
+              Free Storage
+            </p>
+
+            <h2 className="text-3xl font-bold text-purple-600 mt-3">
               {freeStorage.toFixed(2)} MB
-            </p>
+            </h2>
+
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-gray-500">Total Files</h3>
+          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6">
 
-            <p className="text-3xl font-bold text-red-600 mt-3">
-              {files.length}
+            <p className="text-gray-500">
+              Total Files
             </p>
+
+            <h2 className="text-3xl font-bold text-red-500 mt-3">
+              {files.length}
+            </h2>
+
           </div>
 
         </div>
 
-        {/* Progress Bar */}
+        {/* Storage Usage */}
 
-        <div className="bg-white rounded-xl shadow-lg p-6 mt-8">
+        <div className="bg-white rounded-2xl shadow-md mt-8 p-6">
 
-          <h2 className="text-2xl font-bold mb-4">
-            Storage Usage
-          </h2>
+          <div className="flex justify-between items-center mb-4">
 
-          <div className="w-full bg-gray-300 rounded-full h-5">
+            <h2 className="text-xl sm:text-2xl font-bold">
+              Storage Usage
+            </h2>
+
+            <span className="text-blue-600 font-semibold">
+              {usedStorage.toFixed(2)} / {totalStorage} MB
+            </span>
+
+          </div>
+
+          <div className="w-full bg-gray-300 rounded-full h-4">
 
             <div
-              className="bg-blue-600 h-5 rounded-full"
+              className="bg-blue-600 h-4 rounded-full transition-all duration-500"
               style={{
-                width: `${(usedStorage / totalStorage) * 100}%`,
+                width: `${Math.min(
+                  (usedStorage / totalStorage) * 100,
+                  100
+                )}%`,
               }}
             ></div>
 
           </div>
 
-          <p className="mt-3 text-gray-600">
-            {usedStorage.toFixed(2)} MB used of {totalStorage} MB
-          </p>
-
         </div>
 
         {/* Recent Files */}
 
-        <div className="bg-white rounded-xl shadow-lg p-6 mt-8">
+        <div className="bg-white rounded-2xl shadow-md mt-8 p-6">
 
-          <h2 className="text-2xl font-bold mb-5">
-            Recent Files
-          </h2>
+          <div className="flex justify-between items-center mb-5">
+
+            <h2 className="text-xl sm:text-2xl font-bold">
+              Recent Files
+            </h2>
+
+            <button
+              onClick={() => navigate("/files")}
+              className="text-blue-600 hover:underline"
+            >
+              View All
+            </button>
+
+          </div>
 
           {files.length === 0 ? (
-            <p className="text-gray-500">
-              No files uploaded yet.
-            </p>
-          ) : (
-            files
-              .slice(-5)
-              .reverse()
-              .map((file) => (
-                <div
-                  key={file.id}
-                  className="flex justify-between border-b py-3"
-                >
-                  <span>{file.name}</span>
 
-                  <span>{file.size}</span>
-                </div>
-              ))
+            <div className="text-center py-12">
+
+              <h3 className="text-xl font-semibold text-gray-600">
+                No Files Uploaded
+              </h3>
+
+              <p className="text-gray-500 mt-2">
+                Upload your first file to see it here.
+              </p>
+
+            </div>
+
+          ) : (
+
+            <div className="space-y-3">
+
+              {files
+                .slice(-5)
+                .reverse()
+                .map((file) => (
+
+                  <div
+                    key={file.id}
+                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-50 rounded-xl p-4 hover:bg-gray-100 transition"
+                  >
+
+                    <div>
+
+                      <h3 className="font-semibold">
+                        {file.name}
+                      </h3>
+
+                      <p className="text-gray-500 text-sm">
+                        Uploaded File
+                      </p>
+
+                    </div>
+
+                    <span className="font-semibold text-blue-600 mt-2 sm:mt-0">
+                      {file.size}
+                    </span>
+
+                  </div>
+
+                ))}
+
+            </div>
+
           )}
 
         </div>
 
       </main>
+
     </div>
   );
 }

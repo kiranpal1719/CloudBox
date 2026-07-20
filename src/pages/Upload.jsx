@@ -45,26 +45,39 @@ function Upload() {
   };
 
   return (
-    <div className="flex">
+    <div className="flex bg-gray-100">
       <Sidebar />
 
-      <main className="flex-1 bg-gray-100 min-h-screen p-8">
-        <h1 className="text-4xl font-bold text-blue-600 mb-8">
-          Upload Files
-        </h1>
+      <main className="flex-1 min-h-screen p-4 sm:p-6 lg:p-8">
 
-        <div className="bg-white rounded-xl shadow-lg p-10 text-center">
-          <div className="border-2 border-dashed border-blue-500 rounded-xl p-16">
+        {/* Header */}
 
-            <h2 className="text-2xl font-semibold">
+        <div className="mb-8">
+
+          <h1 className="text-3xl sm:text-4xl font-bold text-blue-600">
+            Upload Files
+          </h1>
+
+          <p className="text-gray-500 mt-2">
+            Upload your files securely to CloudVault.
+          </p>
+
+        </div>
+
+        {/* Upload Box */}
+
+        <div className="bg-white rounded-2xl shadow-lg p-5 sm:p-8 lg:p-10">
+
+          <div className="border-2 border-dashed border-blue-500 rounded-2xl p-6 sm:p-10 lg:p-16 text-center">
+
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold">
               Drag & Drop Files Here
             </h2>
 
-            <p className="text-gray-500 mt-3 mb-6">
-              or
+            <p className="text-gray-500 mt-4 mb-8">
+              or choose a file from your device
             </p>
 
-            {/* Hidden File Input */}
             <input
               type="file"
               ref={fileInputRef}
@@ -73,46 +86,60 @@ function Upload() {
             />
 
             {/* Buttons */}
-            <div className="flex justify-center gap-4">
+
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+
               <button
                 onClick={handleChooseFile}
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl transition"
               >
                 Choose File
               </button>
 
               <button
                 onClick={handleUpload}
-                className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700"
+                className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl transition"
               >
                 Upload
               </button>
+
             </div>
 
-            {/* Selected File Details */}
+            {/* Selected File */}
+
             {selectedFile && (
-              <div className="mt-8 bg-gray-100 p-5 rounded-lg text-left">
-                <h3 className="text-lg font-semibold mb-3">
+
+              <div className="mt-8 bg-gray-100 rounded-xl p-5 text-left">
+
+                <h3 className="text-lg font-bold mb-4 text-blue-600">
                   Selected File
                 </h3>
 
-                <p>
-                  <strong>Name:</strong> {selectedFile.name}
-                </p>
+                <div className="space-y-2">
 
-                <p>
-                  <strong>Size:</strong>{" "}
-                  {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-                </p>
+                  <p className="break-all">
+                    <strong>Name:</strong> {selectedFile.name}
+                  </p>
 
-                <p>
-                  <strong>Type:</strong> {selectedFile.type}
-                </p>
+                  <p>
+                    <strong>Size:</strong>{" "}
+                    {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+
+                  <p className="break-all">
+                    <strong>Type:</strong> {selectedFile.type}
+                  </p>
+
+                </div>
+
               </div>
+
             )}
 
           </div>
+
         </div>
+
       </main>
     </div>
   );

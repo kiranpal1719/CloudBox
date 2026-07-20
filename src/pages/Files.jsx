@@ -27,65 +27,93 @@ function Files() {
   };
 
   return (
-    <div className="flex">
+    <div className="flex bg-gray-100">
+
       <Sidebar />
 
-      <main className="flex-1 bg-gray-100 min-h-screen p-8">
+      <main className="flex-1 min-h-screen p-4 sm:p-6 lg:p-8">
 
-        <h1 className="text-4xl font-bold text-blue-600 mb-8">
-          My Files
-        </h1>
+        {/* Heading */}
+
+        <div className="mb-8">
+
+          <h1 className="text-3xl sm:text-4xl font-bold text-blue-600">
+            My Files
+          </h1>
+
+          <p className="text-gray-500 mt-2">
+            View, download and manage your uploaded files.
+          </p>
+
+        </div>
 
         {files.length === 0 ? (
-          <div className="bg-white p-10 rounded-xl shadow text-center">
-            <h2 className="text-2xl font-semibold text-gray-600">
+
+          <div className="bg-white rounded-2xl shadow-lg p-10 text-center">
+
+            <h2 className="text-2xl font-bold text-gray-600">
               No Files Uploaded
             </h2>
 
             <p className="text-gray-500 mt-3">
               Upload your first file from the Upload page.
             </p>
+
           </div>
+
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
 
             {files.map((file) => (
+
               <div
                 key={file.id}
-                className="bg-white rounded-xl shadow-lg p-6"
+                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition p-6"
               >
-                <h2 className="text-xl font-bold text-blue-600">
+
+                {/* File Name */}
+
+                <h2 className="text-xl font-bold text-blue-600 break-all">
                   {file.name}
                 </h2>
 
-                <p className="mt-3 text-gray-600">
-                  <strong>Size:</strong> {file.size}
-                </p>
+                {/* File Details */}
 
-                <p className="mt-2 text-gray-600">
-                  <strong>Type:</strong> {file.type}
-                </p>
+                <div className="mt-5 space-y-2 text-gray-600">
 
-                <p className="mt-2 text-gray-600">
-                  <strong>Uploaded:</strong>
-                </p>
+                  <p>
+                    <strong>Size:</strong> {file.size}
+                  </p>
 
-                <p className="text-sm text-gray-500">
-                  {file.uploadedAt}
-                </p>
+                  <p className="break-all">
+                    <strong>Type:</strong> {file.type}
+                  </p>
 
-                <div className="flex gap-3 mt-6">
+                  <p>
+                    <strong>Uploaded:</strong>
+                  </p>
+
+                  <p className="text-sm text-gray-500">
+                    {file.uploadedAt}
+                  </p>
+
+                </div>
+
+                {/* Buttons */}
+
+                <div className="mt-6 flex flex-col sm:flex-row gap-3">
 
                   <button
                     onClick={() => handleDownload(file)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    className="w-full sm:w-auto flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition"
                   >
                     Download
                   </button>
 
                   <button
                     onClick={() => handleDelete(file.id)}
-                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                    className="w-full sm:w-auto flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition"
                   >
                     Delete
                   </button>
@@ -93,12 +121,15 @@ function Files() {
                 </div>
 
               </div>
+
             ))}
 
           </div>
+
         )}
 
       </main>
+
     </div>
   );
 }
