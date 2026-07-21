@@ -143,8 +143,7 @@ function Hero() {
         </h1>
 
         <p className="mt-6 text-gray-600 text-base sm:text-lg lg:text-xl">
-          CloudVault is your personal cloud storage platform where you can
-          upload, organize and access your files anytime, anywhere.
+          Efficiently manage your files with secure cloud storage, providing fast access, reliable storage, and seamless file management.
         </p>
 
         <div className="mt-8 flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
