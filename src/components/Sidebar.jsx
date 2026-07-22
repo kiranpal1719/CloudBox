@@ -1,152 +1,186 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaBars,
   FaTimes,
   FaHome,
-  FaCloudUploadAlt,
   FaFolderOpen,
-  FaUser,
+  FaClock,
+  FaPlus,
+  FaUserCircle,
   FaSignOutAlt,
 } from "react-icons/fa";
 
 function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
-  const menuItems = [
-    {
-      name: "Dashboard",
-      path: "/dashboard",
-      icon: <FaHome />,
-    },
-    {
-      name: "Upload",
-      path: "/upload",
-      icon: <FaCloudUploadAlt />,
-    },
-    {
-      name: "My Files",
-      path: "/files",
-      icon: <FaFolderOpen />,
-    },
-    {
-      name: "Profile",
-      path: "/profile",
-      icon: <FaUser />,
-    },
-  ];
+const handleLogout = () => {
+  navigate("/", { replace: true });
+  setIsOpen(false);
+};
 
   return (
     <>
       {/* Mobile Header */}
-
-      <header className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-gray-900 text-white flex items-center justify-between px-5 shadow-md z-50">
-
+      <header className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#181818] border-b border-gray-800 flex items-center justify-between px-4 z-50">
         <button onClick={() => setIsOpen(true)}>
-          <FaBars size={22} />
+          <FaBars className="text-white text-xl" />
         </button>
 
-        <h1 className="text-xl font-bold text-blue-400">
+        <h1 className="text-blue-600 font-semibold text-lg">
           CloudVault
         </h1>
 
         <div className="w-6"></div>
-
       </header>
 
-      {/* Overlay */}
 
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setIsOpen(false)}
-        />
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+        ></div>
       )}
 
-      {/* Sidebar */}
 
       <aside
-        className={`fixed top-0 left-0 h-screen w-64 bg-gray-900 text-white z-50 transform transition-transform duration-300
-        ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }
-        lg:translate-x-0`}
+        className={`
+          fixed top-0 left-0 h-screen
+          w-60 sm:w-64
+          bg-[#1B1B1B]
+          border-r border-gray-800
+          text-white
+          flex flex-col
+          transition-transform duration-300
+          z-50
+          ${
+            isOpen
+              ? "translate-x-0"
+              : "-translate-x-full lg:translate-x-0"
+          }
+        `}
       >
 
-        {/* Logo */}
-
-        <div className="flex items-center justify-between p-6 border-b border-gray-700">
-
-          <h1 className="text-3xl font-bold text-blue-400">
-            CloudVault
-          </h1>
-
-          <button
-            onClick={() => setIsOpen(false)}
-            className="lg:hidden"
-          >
-            <FaTimes size={22} />
+        <div className="lg:hidden flex justify-end p-4">
+          <button onClick={() => setIsOpen(false)}>
+            <FaTimes className="text-xl" />
           </button>
-
         </div>
 
-        {/* Menu */}
 
-        <nav className="mt-6 px-3">
+        <div className="px-5 pt-4">
+          <div className="text-lg">
+            CloudVault
+          </div>
+        </div>
 
-          {menuItems.map((item) => (
 
-            <Link
-              key={item.name}
-              to={item.path}
-              onClick={() => setIsOpen(false)}
-              className={`flex items-center gap-4 px-5 py-4 rounded-xl mb-2 transition-all
-              ${
-                location.pathname === item.path
-                  ? "bg-blue-600"
-                  : "hover:bg-gray-800"
-              }`}
-            >
+        <div className="px-4 mt-6">
+          <Link
+            to="/upload"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center justify-center gap-2 bg-white text-gray-900 py-2.5 rounded-lg font-medium hover:bg-gray-200 transition"
+          >
+            <FaPlus />
+            New
+          </Link>
+        </div>
 
-              <span className="text-xl">
-                {item.icon}
-              </span>
 
-              <span className="text-lg">
-                {item.name}
-              </span>
+        <nav className="mt-6 px-2 space-y-1">
 
-            </Link>
+          <Link
+            to="/dashboard"
+            onClick={() => setIsOpen(false)}
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+              location.pathname === "/dashboard"
+                ? "bg-[#313131]"
+                : "hover:bg-[#2A2A2A]"
+            }`}
+          >
+            <FaHome />
+            Home
+          </Link>
 
-          ))}
+
+          <Link
+            to="/files"
+            onClick={() => setIsOpen(false)}
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+              location.pathname === "/files"
+                ? "bg-[#313131]"
+                : "hover:bg-[#2A2A2A]"
+            }`}
+          >
+            <FaFolderOpen />
+            My Drive
+          </Link>
+
+
+          <Link
+            to="/recent"
+            onClick={() => setIsOpen(false)}
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+              location.pathname === "/recent"
+                ? "bg-[#313131]"
+                : "hover:bg-[#2A2A2A]"
+            }`}
+          >
+            <FaClock />
+            Recent
+          </Link>
 
         </nav>
 
-        {/* Logout */}
 
-        <div className="absolute bottom-5 left-0 w-full px-3">
+        {/* Bottom Section */}
+        <div className="mt-auto border-t border-gray-700 p-4">
 
+
+          {/* Profile */}
           <Link
-            to="/login"
-            className="flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-red-600 transition"
+            to="/profile"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-3 hover:bg-[#2A2A2A] rounded-lg p-2 transition"
           >
 
-            <FaSignOutAlt className="text-xl" />
+            <FaUserCircle
+              size={38}
+              className="text-gray-400"
+            />
 
-            <span className="text-lg">
-              Logout
-            </span>
+            <div>
+              <h3 className="text-sm font-semibold">
+                My Profile
+              </h3>
+
+              <p className="text-xs text-gray-400">
+                CloudVault User
+              </p>
+            </div>
 
           </Link>
+
+
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="mt-4 w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-[#2A2A2A] transition"
+          >
+            <FaSignOutAlt />
+            Logout
+          </button>
+
 
         </div>
 
       </aside>
 
-      {/* Desktop Spacer */}
 
-      <div className="hidden lg:block w-64 flex-shrink-0"></div>
+      <div className="hidden lg:block w-60 sm:w-64"></div>
+
     </>
   );
 }

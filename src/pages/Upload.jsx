@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FiUploadCloud, FiX } from "react-icons/fi";
 import Sidebar from "../components/Sidebar";
 
 function Upload() {
@@ -35,44 +36,66 @@ function Upload() {
       size: (selectedFile.size / 1024 / 1024).toFixed(2) + " MB",
       type: selectedFile.type,
       uploadedAt: new Date().toLocaleString(),
+      preview: URL.createObjectURL(selectedFile),
     });
 
-    localStorage.setItem("myFiles", JSON.stringify(files));
+    localStorage.setItem(
+      "myFiles",
+      JSON.stringify(files)
+    );
 
     alert("File Uploaded Successfully!");
 
-    navigate("/files");
+    navigate("/dashboard");
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-[#0d0d0d]">
 
       <Sidebar />
 
-      <main className="flex-1 p-5 sm:p-6 lg:p-8 mt-16 lg:mt-0">
+      <main className="flex-1 mt-16 lg:mt-0 flex items-center justify-center p-4">
 
-        <div className="mb-8">
+        {/* Dark Overlay */}
 
-          <h1 className="text-3xl md:text-4xl font-bold text-blue-600">
-            Upload Files
-          </h1>
+        <div className="absolute inset-0 bg-black/60"></div>
 
-          <p className="text-gray-500 mt-2">
-            Upload your documents, images and videos securely.
-          </p>
+        {/* Upload Modal */}
 
-        </div>
+        <div className="relative z-10 bg-[#181818] w-full max-w-md rounded-xl border border-gray-700 shadow-2xl">
 
-        <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10">
+          {/* Header */}
 
-          <div className="border-2 border-dashed border-blue-500 rounded-2xl p-8 md:p-16 text-center">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-700">
 
-            <h2 className="text-2xl font-bold">
-              Drag & Drop Files Here
-            </h2>
+            <div className="flex items-center gap-3">
 
-            <p className="text-gray-500 mt-3">
-              or choose a file from your device
+              <FiUploadCloud
+                className="text-white"
+                size={22}
+              />
+
+              <h2 className="text-white text-lg font-semibold">
+                Upload File
+              </h2>
+
+            </div>
+
+            <button
+              onClick={() => navigate("/dashboard")}
+              className="text-gray-400 hover:text-white"
+            >
+              <FiX size={20} />
+            </button>
+
+          </div>
+
+          {/* Body */}
+
+          <div className="p-5">
+
+            <p className="text-gray-400 text-sm mb-5">
+              Select a file to upload to CloudVault
             </p>
 
             <input
@@ -82,52 +105,59 @@ function Upload() {
               className="hidden"
             />
 
-            <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
-
-              <button
-                onClick={handleChooseFile}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl"
-              >
-                Choose File
-              </button>
-
-              <button
-                onClick={handleUpload}
-                className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl"
-              >
-                Upload
-              </button>
-
-            </div>
+            <button
+              onClick={handleChooseFile}
+              className="w-full bg-[#252525] hover:bg-[#303030] text-white border border-gray-700 rounded-lg py-3 transition"
+            >
+              {selectedFile
+                ? selectedFile.name
+                : "Choose File"}
+            </button>
 
             {selectedFile && (
 
-              <div className="mt-10 bg-gray-100 rounded-xl p-6 text-left">
+              <div className="mt-5 bg-[#232323] rounded-lg p-4 border border-gray-700">
 
-                <h3 className="text-xl font-bold mb-4">
-                  Selected File
-                </h3>
+                <p className="text-white text-sm">
+                  <span className="font-semibold">
+                    Name:
+                  </span>{" "}
+                  {selectedFile.name}
+                </p>
 
-                <div className="space-y-3">
+                <p className="text-gray-400 text-sm mt-2">
+                  Size:{" "}
+                  {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                </p>
 
-                  <p>
-                    <strong>Name :</strong> {selectedFile.name}
-                  </p>
-
-                  <p>
-                    <strong>Size :</strong>{" "}
-                    {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-                  </p>
-
-                  <p>
-                    <strong>Type :</strong> {selectedFile.type}
-                  </p>
-
-                </div>
+                <p className="text-gray-400 text-sm">
+                  Type: {selectedFile.type}
+                </p>
 
               </div>
 
             )}
+
+            <div className="mt-6 flex flex-col sm:flex-row gap-3">
+
+  <button
+    onClick={handleUpload}
+    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition"
+  >
+    Upload File
+  </button>
+
+  <button
+    onClick={() => {
+      setSelectedFile(null);
+      navigate("/dashboard");
+    }}
+    className="flex-1 bg-[#2b2b2b] hover:bg-[#383838] text-white py-3 rounded-lg font-medium transition"
+  >
+    Cancel Upload
+  </button>
+
+</div>
 
           </div>
 
