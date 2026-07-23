@@ -8,6 +8,8 @@ import Dashboard from "../pages/Dashboard";
 import Upload from "../pages/Upload";
 import Files from "../pages/Files";
 import Profile from "../pages/Profile";
+import Recent from "../components/Recent";
+
 
 function AppRoutes() {
   return (
@@ -20,6 +22,7 @@ function AppRoutes() {
       <Route path="/upload" element={<Upload />} />
       <Route path="/files" element={<Files />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/recent" element={<Recent />} />
      
     </Routes>
   );

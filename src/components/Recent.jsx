@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import { FiMoreVertical, FiEdit, FiTrash2, FiX, FiDownload } from "react-icons/fi";
+import { FiMoreVertical, FiEdit, FiTrash2, FiX, FiDownload, FiClock } from "react-icons/fi";
 import { FaRegFileAlt } from "react-icons/fa";
 
-// 1. DRY: Reusable Preview Component (Grid Card aur Full Modal dono jagah use hoga)
-const FileMediaContent = ({ file, isModal = false }) => {
+// DRY: Sub-component for rendering Media Preview in Grid and Modal
+const MediaPreview = ({ file, isModal = false }) => {
   const isImage = file.type?.startsWith("image/");
   const isVideo = file.type?.startsWith("video/");
 
@@ -40,9 +40,9 @@ const FileMediaContent = ({ file, isModal = false }) => {
   );
 };
 
-function Dashboard() {
+function Recent() {
   const navigate = useNavigate();
-  const [files, setFiles] = useState([]);
+  const [recentFiles, setRecentFiles] = useState([]);
   const [activeMenuId, setActiveMenuId] = useState(null);
   const [editingFile, setEditingFile] = useState(null);
   const [newFileName, setNewFileName] = useState("");
@@ -50,23 +50,25 @@ function Dashboard() {
 
   useEffect(() => {
     const storedFiles = JSON.parse(localStorage.getItem("myFiles")) || [];
-    setFiles(storedFiles);
+    // Show only the latest files (up to 10) sorted by newest
+    setRecentFiles(storedFiles.slice().reverse().slice(0, 10));
   }, []);
 
-  // DRY Helper: Centralized Storage Sync
-  const updateStorage = (updatedList) => {
-    setFiles(updatedList);
-    localStorage.setItem("myFiles", JSON.stringify(updatedList));
+  // DRY: Storage updater
+  const updateStorage = (updatedFiles) => {
+    setRecentFiles(updatedFiles);
+    localStorage.setItem("myFiles", JSON.stringify(updatedFiles));
     setActiveMenuId(null);
   };
 
-  const handleDeleteFile = (id) => {
-    updateStorage(files.filter((f) => f.id !== id));
+  const handleDelete = (id) => {
+    const updated = recentFiles.filter((f) => f.id !== id);
+    updateStorage(updated);
   };
 
-  const handleSaveEdit = () => {
+  const handleSaveRename = () => {
     if (!newFileName.trim()) return;
-    const updated = files.map((f) =>
+    const updated = recentFiles.map((f) =>
       f.id === editingFile.id
         ? { ...f, name: newFileName, uploadedAt: new Date().toLocaleString() }
         : f
@@ -79,21 +81,21 @@ function Dashboard() {
     <div className="flex min-h-screen bg-[#111111]" onClick={() => setActiveMenuId(null)}>
       <Sidebar />
 
-      <main className="flex-1 w-full min-w-0 overflow-x-hidden">
-        <div className="px-4 sm:px-6 lg:px-10 py-5">
-          <h1 className="text-white text-lg font-semibold">Dashboard</h1>
+      <main className="flex-1 w-full min-w-0 overflow-x-hidden pt-16 lg:pt-0">
+        <div className="px-4 sm:px-6 lg:px-10 py-5 flex items-center gap-3">
+          <FiClock className="text-blue-500 text-xl" />
+          <h1 className="text-white text-lg sm:text-xl font-semibold">Recent Files</h1>
         </div>
 
         <div className="px-4 sm:px-6 lg:px-10 pb-10">
-          <h2 className="text-white text-2xl sm:text-3xl font-bold">Welcome to CloudVault</h2>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 mt-6 w-full">
-            {files.length === 0 ? (
+          {/* Responsive Grid Layout */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 mt-4 w-full">
+            {recentFiles.length === 0 ? (
               <div className="col-span-full w-full max-w-5xl mx-auto">
                 <div className="bg-[#1d1d1d] border border-gray-700 rounded-xl min-h-[280px] flex flex-col justify-center items-center px-5 text-center">
-                  <FaRegFileAlt size={65} className="text-gray-500" />
-                  <h3 className="text-white text-xl sm:text-2xl font-semibold mt-5">No Files Uploaded</h3>
-                  <p className="text-gray-400 mt-2">Upload your first file to see it here.</p>
+                  <FiClock size={65} className="text-gray-500" />
+                  <h3 className="text-white text-xl sm:text-2xl font-semibold mt-5">No Recent Files</h3>
+                  <p className="text-gray-400 mt-2">Files you upload will show up here.</p>
                   <button
                     onClick={() => navigate("/upload")}
                     className="mt-6 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-white transition"
@@ -103,12 +105,12 @@ function Dashboard() {
                 </div>
               </div>
             ) : (
-              files.slice().reverse().map((file) => (
+              recentFiles.map((file) => (
                 <div
                   key={file.id}
                   className="bg-[#1d1d1d] border border-gray-700 rounded-lg sm:rounded-xl hover:border-blue-500 transition overflow-hidden relative flex flex-col"
                 >
-                  {/* Header */}
+                  {/* Card Header */}
                   <div className="flex justify-between items-center p-2 sm:p-3">
                     <h3 className="text-white text-[11px] sm:text-xs font-medium truncate max-w-[75%]" title={file.name}>
                       {file.name}
@@ -139,7 +141,7 @@ function Dashboard() {
                             <FiEdit size={12} /> Rename
                           </button>
                           <button
-                            onClick={() => handleDeleteFile(file.id)}
+                            onClick={() => handleDelete(file.id)}
                             className="w-full flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] sm:text-xs text-red-400 hover:bg-[#333] transition"
                           >
                             <FiTrash2 size={12} /> Delete
@@ -149,15 +151,15 @@ function Dashboard() {
                     </div>
                   </div>
 
-                  {/* Media Content Wrapper */}
+                  {/* Thumbnail / Image Preview */}
                   <div
                     onClick={() => setPreviewFile(file)}
                     className="h-24 sm:h-28 md:h-32 bg-[#262626] flex justify-center items-center overflow-hidden p-1.5 cursor-pointer hover:opacity-90 transition"
                   >
-                    <FileMediaContent file={file} />
+                    <MediaPreview file={file} />
                   </div>
 
-                  {/* Footer */}
+                  {/* Card Footer */}
                   <div className="border-t border-gray-700 p-2 sm:p-3 mt-auto">
                     <p className="text-[9px] sm:text-[10px] text-gray-500">Last Updated</p>
                     <p className="text-[10px] sm:text-xs text-gray-300 mt-0.5 truncate">{file.uploadedAt || "Today"}</p>
@@ -194,12 +196,12 @@ function Dashboard() {
             </div>
           </div>
           <div className="max-w-3xl max-h-[80vh] flex items-center justify-center overflow-hidden rounded-xl bg-[#181818] border border-gray-700 p-2">
-            <FileMediaContent file={previewFile} isModal={true} />
+            <MediaPreview file={previewFile} isModal={true} />
           </div>
         </div>
       )}
 
-      {/* Edit Name Modal */}
+      {/* Rename File Modal */}
       {editingFile && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
           <div className="bg-[#1d1d1d] border border-gray-700 rounded-xl p-5 w-full max-w-xs sm:max-w-sm">
@@ -212,7 +214,7 @@ function Dashboard() {
             />
             <div className="flex gap-2.5">
               <button
-                onClick={handleSaveEdit}
+                onClick={handleSaveRename}
                 className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-xs sm:text-sm font-medium transition"
               >
                 Save
@@ -231,4 +233,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Recent;

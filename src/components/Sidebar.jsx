@@ -29,7 +29,7 @@ const handleLogout = () => {
           <FaBars className="text-white text-xl" />
         </button>
 
-        <h1 className="text-blue-600 font-semibold text-lg">
+        <h1 className="text-white font-semibold text-lg">
           CloudVault
         </h1>
 
@@ -71,7 +71,7 @@ const handleLogout = () => {
 
 
         <div className="px-5 pt-4">
-          <div className="text-lg">
+          <div className="text-lg text-blue-600">
             CloudVault
           </div>
         </div>
@@ -101,7 +101,7 @@ const handleLogout = () => {
             }`}
           >
             <FaHome />
-            Home
+            Dashboard
           </Link>
 
 
@@ -115,7 +115,7 @@ const handleLogout = () => {
             }`}
           >
             <FaFolderOpen />
-            My Drive
+            My Files
           </Link>
 
 
