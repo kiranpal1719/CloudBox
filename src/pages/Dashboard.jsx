@@ -4,7 +4,7 @@ import Sidebar from "../components/Sidebar";
 import { FiMoreVertical, FiEdit, FiTrash2, FiX, FiDownload } from "react-icons/fi";
 import { FaRegFileAlt } from "react-icons/fa";
 
-// 1. DRY: Reusable Preview Component (Grid Card aur Full Modal dono jagah use hoga)
+
 const FileMediaContent = ({ file, isModal = false }) => {
   const isImage = file.type?.startsWith("image/");
   const isVideo = file.type?.startsWith("video/");
@@ -53,7 +53,7 @@ function Dashboard() {
     setFiles(storedFiles);
   }, []);
 
-  // DRY Helper: Centralized Storage Sync
+
   const updateStorage = (updatedList) => {
     setFiles(updatedList);
     localStorage.setItem("myFiles", JSON.stringify(updatedList));

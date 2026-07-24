@@ -13,7 +13,7 @@ import {
   FaThLarge,
 } from "react-icons/fa";
 
-// Category Filter Data (DRY Principle)
+// Category Filter Data 
 const CATEGORIES = [
   { id: "all", label: "All Files", icon: FaThLarge },
   { id: "image", label: "Images", icon: FaImage },
@@ -53,7 +53,7 @@ export default function Files() {
     }
   };
 
-  // Helper Icon Function (DRY)
+
   const getFileIcon = (type) => {
     if (type?.startsWith("image/")) return <FaImage className="text-blue-500" size={26} />;
     if (type?.startsWith("video/")) return <FaVideo className="text-purple-500" size={26} />;
